@@ -706,6 +706,8 @@ rowId = "ID_" + Date.now() + "_" + Math.floor(Math.random()*1000);
 }
 
 const fields = {};
+      fields["Row_ID"] = rowId;
+      fields["Row ID"] = rowId;
 fields["Coffee"] = coffeeName;
 fields["Grade"] = getSingleValue('group_grade');
 fields["Green Grading date"] = document.getElementById('gradingDateInput').value;
