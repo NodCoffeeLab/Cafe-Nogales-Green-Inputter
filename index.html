@@ -1,777 +1,773 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cafe Nogales Green Bean Q.C System</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2563eb">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link class="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5016/5016839.png">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .active-btn { background-color: #2563eb !important; color: white !important; border-color: #2563eb !important; }
-        .accordion-content { transition: max-height 0.3s ease-out; overflow: hidden; }
-        .accordion-content.closed { max-height: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cafe Nogales Green Bean Q.C System</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link class="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5016/5016839.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+.active-btn { background-color: #2563eb !important; color: white !important; border-color: #2563eb !important; }
+.accordion-content { transition: max-height 0.3s ease-out; overflow: hidden; }
+.accordion-content.closed { max-height: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+</style>
 </head>
 <body class="bg-gray-50 min-h-screen pb-16 font-sans text-gray-800">
 
-    <script>
-        // 🛑 [구글 앱스크립트 웹앱 주소 세팅]
-        const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzFfUtFnDmk5FyvAiknHn6u6knNchc-iv-BJu1yLqonrxkXQdPzYAgDtUVYU-yBuc-V/exec";
+<div class="max-w-md mx-auto px-4 pt-6">
+<!-- 상단 헤더 -->
+<header class="mb-5 flex justify-between items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
+<div>
+<h1 id="txt-app-title" class="text-lg font-bold text-gray-900">생두 품질 검사 결과 입력기</h1>
+<p class="text-[10px] text-gray-400 font-mono">Cafe Nogales Q.C System</p>
+</div>
+<div class="flex items-center bg-gray-100 p-0.5 rounded-lg border border-gray-200">
+<button type="button" onclick="changeLanguage('ko')" id="btn-lang-ko" class="px-2.5 py-1 text-xs font-bold rounded-md transition-all bg-white shadow-sm text-blue-600">KO</button>
+<button type="button" onclick="changeLanguage('en')" id="btn-lang-en" class="px-2.5 py-1 text-xs font-bold rounded-md transition-all text-gray-400">EN</button>
+</div>
+</header>
 
-        // 다국어 UI 라벨 사전 (Green Grading date 표기식 고정)
-        const UI_LANG = {
-            ko: {
-                title: "생두 품질 검사 결과 입력기",
-                draftLabel: "📁 진행 중인 임시저장 데이터 불러오기",
-                draftEmpty: "-- 새로 작성하기 또는 목록 새로고침 --",
-                refreshBtn: "🔄 새로고침",
-                sec1: "기본 정보",
-                sec2: "시각적 특성",
-                sec3: "상세 결점두 카운팅",
-                sec4: "중량 및 결점두 영향력",
-                sec5: "종합 평가",
-                coffeeName: "커피 이름",
-                grade: "Grade",
-                gradingDate: "Green Grading date",
-                probType: "Type of Problem",
-                sizeUnif: "Overall Visual-Size uniformity",
-                sizeUnifComm: "Overall Visual-Size uniformity_Comment",
-                colorUnif: "Overall Visual-Colour uniformity",
-                color: "Overall Visual-Colour",
-                fading: "Overall Visual-Overall Fading",
-                colorComm: "Overall Visual-Colour_Comment",
-                qtyAll: "Quantity-All (g)",
-                qtyDef: "Quantity-Defect (g)",
-                defectEffect: "Defect-effect to Quality (internal)",
-                defectInGrade: "Defect-in same grade (internal)",
-                majorDefect: "Major defect",
-                defectComm: "Defect_Comment",
-                qualityChange: "Quality change from PSS",
-                koComment: "Overall Quality Comments (KO)",
-                enComment: "Overall Quality Comments (EN)",
-                btnDraft: "💾 임시 저장",
-                btnComplete: "🚀 검사 완료"
-            },
-            en: {
-                title: "Green Bean Q.C Result Inputter",
-                draftLabel: "📁 Load Draft QC Data",
-                draftEmpty: "-- Create New or Refresh List --",
-                refreshBtn: "🔄 Refresh",
-                sec1: "Basic Information",
-                sec2: "Visual Characteristics",
-                sec3: "Detailed Defect Counting",
-                sec4: "Weight & Defect Influence",
-                sec5: "Overall Evaluation",
-                coffeeName: "Coffee Name",
-                grade: "Grade",
-                gradingDate: "Green Grading date",
-                probType: "Type of Problem",
-                sizeUnif: "Overall Visual-Size Uniformity",
-                sizeUnifComm: "Overall Visual-Size Uniformity Comment",
-                colorUnif: "Overall Visual-Colour Uniformity",
-                color: "Overall Visual-Colour",
-                fading: "Overall Visual-Overall Fading",
-                colorComm: "Overall Visual-Colour_Comment",
-                qtyAll: "Quantity-All (g)",
-                qtyDef: "Quantity-Defect (g)",
-                defectEffect: "Defect-effect to Quality (internal)",
-                defectInGrade: "Defect-in same grade (internal)",
-                majorDefect: "Major Defect",
-                defectComm: "Defect Comment",
-                qualityChange: "Quality Change from PSS",
-                koComment: "Overall Quality Comments (KO)",
-                enComment: "Overall Quality Comments (EN)",
-                btnDraft: "💾 Save Draft",
-                btnComplete: "🚀 Complete Inspection"
-            }
-        };
+<!-- 임시저장 패널 -->
+<div class="mb-5 bg-blue-50 border border-blue-150 p-4 rounded-xl flex items-center justify-between gap-3 shadow-sm">
+<div class="flex-1">
+<label id="lbl-draft" class="block text-xs font-bold text-blue-800 mb-1">📁 진행 중인 임시저장 데이터 불러오기</label>
+<select id="draftSelect" class="w-full bg-white border border-blue-200 rounded-lg p-2 text-xs text-gray-700 focus:outline-none shadow-sm">
+<option value="">-- 새로 작성하기 또는 목록 새로고침 --</option>
+</select>
+</div>
+<button type="button" id="btn-refresh" onclick="loadDraftList()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-3 rounded-lg shadow-sm h-fit self-end transition-all">
+🔄 새로고침
+</button>
+</div>
 
-        const DICTIONARY = {
-            problem: {
-                "높은 수분 함량에 의해 품질 저하됨": "Quality deteriorated by high moisture",
-                "높은 온도로 인해 품질 저하": "Quality deteriorated by high temperature",
-                "높은 수분 함량에 의한 품질 저하 위험": "Risk of quality deterioration by high moisture",
-                "건조 불량": "Drying issue",
-                "드라이 밀 공정 불량": "Dry mill process failure",
-                "bag/box별 품질 불균일": "Non-uniform quality per bag/box",
-                "배아 손상됨": "Embryos damaged",
-                "이물질": "Foreign matter",
-                "곰팡이": "Fungus",
-                "높은 결점두 함량": "High defect rate",
-                "보관 불량": "Storage",
-                "발효": "Fermentation",
-                "품질 문제 없음": "No quality issue"
-            },
-            sizeComment: {
-                "규격 외 작은 생두 포함 (#12 이하)": "Under-sized tiny beans included (under #12).",
-                "규격 외 큰 생두 포함 (#20 이상)": "Over-sized large beans included (over #20).",
-                "생두 사이의 크기 차이가 매우 높음": "Size difference among green beans is very high.",
-                "생두 사이의 크기 차이가 있음": "Size difference among green beans exists.",
-                "품질 문제 없음": "No quality issue"
-            },
-            // 💡 신규 수용 사항: Overall Visual-Colour_Comment 16가지 국/영문 마스터 매핑 딕셔너리 구축
-            colorComment: {
-                "생두의 색상이 노란색이지만 품질은 정상임": "Green bean color is yellow, but quality is normal.",
-                "생두의 색상이 갈색이지만 품질은 정상임": "Green bean color is brown, but quality is normal.",
-                "생두의 색상이 Dark green이지만 품질은 정상임": "Green bean color is dark green, but quality is normal.",
-                "생두의 색상이 Light green이지만 품질은 정상임": "Green bean color is light green, but quality is normal.",
-                "노란색 생두가 다수 포함되어 있지만 품질은 정상임": "Many yellow beans included, but quality is normal.",
-                "갈색 생두가 다수 포함되어 있지만 품질은 정상임": "Many brown beans included, but quality is normal.",
-                "생두의 색상이 노란색이며 과발효 되었음": "Green bean color is yellow and over-fermented.",
-                "생두의 색상이 갈색이며 과발효 되었음": "Green bean color is brown and over-fermented.",
-                "생두의 색상이 Dark green이며 건조가 덜 되었음": "Green bean color is dark green and under-dried.",
-                "생두의 색상이 Light green이며 과발효 되었음": "Green bean color is light green and over-fermented.",
-                "생두의 색상이 Light green이며 유기물이 손실되었음": "Green bean color is light green and organic matter lost.",
-                "노란색 생두가 다수 포함되어 있으며 과발효되었음": "Many yellow beans included and over-fermented.",
-                "갈색 생두가 다수 포함되어 있으며 과발효되었음": "Many brown beans included and over-fermented.",
-                "생두의 색상이 흰색이며 유기물이 손실되었음": "Green bean color is white and organic matter lost.",
-                "생두의 표면이 약간 바랬음": "Surface of green bean is slightly faded.",
-                "일부 생두의 표면이 약간 바랬음": "Some green bean is slightly faded.",
-                "녹색/흰색/노란색/갈색 생두가 섞였지만 품질은 정상임": "Green/White/Yellow/Brown color beans mixed, but quality is normal.",
-                "품질 문제 없음": "No quality issue"
-            },
-            defectComment: {
-                "생두의 크기가 작기 때문에 실제 디펙트 빈의 함량에 비해 디펙트 점수가 높음.": "Defect score is high compared to actual defect bean content due to small bean size.",
-                "생두의 크기가 크기 때문에 실제 디펙트 빈의 함량에 비해 디펙트 점수가 낮음.": "Defect score is low compared to actual defect bean content due to large bean size.",
-                "품질에 강한 영향을 미치는 디펙트빈이 적으므로 생두의 실제 품질은 디펙트 점수에 비해 좋음.": "Actual green bean quality is better than defect score because there are few defect beans that strongly affect quality.",
-                "품질에 강한 영향을 미치는 디펙트빈이 포함되어 있음.": "Defect beans that strongly affect quality are included.",
-                "정상 생두와 사워빈을 구분할 수 없기 때문에 사워빈을 분류하지 않음. 실제 디펙트 함량은 보고된 것보다 높음.": "Sour beans not sorted because it is impossible to distinguish between normal beans and sour beans. Actual defect rate is higher than reported.",
-                "정상 생두와 탈색된 생두를 구분할 수 없기 때문에 Partially Discolored를 분류하지 않음. 실제 디펙트 함량은 보고된 것보다 높음.": "Partially Discolored beans not sorted because it is impossible to distinguish between normal beans and decolored beans. Actual defect rate is higher than reported.",
-                "드라이 밀에서 분류 공정을 통해 제거되어야 하는 작은 생두 파편이 발견됨.": "Small green bean fragments found that should have been removed during dry mill sorting process.",
-                "생두 다수에 약한 백화가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Many beans show slightly whitening, but were not classified as defects due to low intensity.",
-                "생두 대부분에 약한 백화가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Most beans show slightly whitening, but were not classified as defects due to low intensity.",
-                "생두 다수에 백화(Fade)가 진행되어 분류가 어려움. 실제 디펙트 함량은 그린 그레이딩 결과보다 높음.": "Many beans are faded, making sorting difficult. Actual defect rate is higher than green grading results.",
-                "생두 다수에 약한 사워가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Many beans show slightly sour, but were not classified as defects due to low intensity.",
-                "생두 대부분에 약한 사워가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Most beans show slightly sourness, but were not classified as defects due to low intensity.",
-                "생두 다수에 사워가 진행되어 분류가 어려움. 실제 디펙트 함량은 그린 그레이딩 결과보다 높음.": "Many beans are sour, making sorting difficult. Actual defect rate is higher than green grading results.",
-                "생두 다수에 미세한 결정화가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Many beans show fine crystallization, but were not classified as defects due to low intensity.",
-                "생두 대부분에 미세한 결정화가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Most beans show fine crystallization, but were not classified as defects due to low intensity.",
-                "생두 다수에 결정화가 진행되어 분류가 어려움. 실제 디펙트 함량은 그린 그레이딩 결과보다 높음.": "Many beans show crystallization, making sorting difficult. Actual defect rate is higher than green grading results.",
-                "품질 문제 없음": "No quality issue"
-            }
-        };
+<form id="qcForm" class="space-y-4">
+<input type="hidden" id="currentRowId" value="">
 
-        const DEFECT_TYPES = [
-            "Full black (1)", "Partial Black (2)", "Full sour (1)", "Partial Sour (2)",
-            "Reposado (1)", "Cardenello (1)", "Partial Cardenillo (2)", "Butter bean (1)",
-            "Foreign matter (1)", "Immature/Unfipe (5)", "Deformed/Withered (5)",
-            "Elephant(Shell, Core)", "Actual Withered", "Flatted bean (5)", "Broken/Chipped (5)",
-            "Insect damage (5)", "Slightly Insect damage (10)", "Over dried (5)",
-            "Under dried (5)", "Crystalised", "Partially decoloured"
-        ];
-    </script>
+<!-- 기본 정보 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+<button type="button" class="w-full px-4 py-3 bg-gray-50 flex justify-between items-center border-b border-gray-150 font-bold text-sm text-gray-800" onclick="toggleAccordion(this)">
+<span id="lbl-sec1">기본 정보</span>
+<span class="arrow text-xs text-gray-400">▲</span>
+</button>
+<div class="accordion-content p-4 space-y-3">
+<div>
+<label id="lbl-coffeeName" class="block text-xs font-semibold text-gray-600 mb-1">커피 이름</label>
+<input type="text" id="coffeeNameInput" required class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-400 outline-none">
+</div>
+<div>
+<label id="lbl-grade" class="block text-xs font-semibold text-gray-600 mb-1">Grade</label>
+<div class="grid grid-cols-2 gap-2" id="group_grade">
+<button type="button" data-value="Microlot" class="py-2 text-xs font-medium border border-gray-200 rounded-lg bg-gray-50 select-single">Microlot</button>
+<button type="button" data-value="Regional" class="py-2 text-xs font-medium border border-gray-200 rounded-lg bg-gray-50 select-single">Regional</button>
+</div>
+</div>
+<div>
+<label id="lbl-gradingDate" class="block text-xs font-semibold text-gray-600 mb-1">Green Grading date</label>
+<input type="date" id="gradingDateInput" required class="w-full p-2 border border-gray-300 rounded-lg text-sm outline-none">
+</div>
+</div>
+</div>
 
-    <div class="max-w-md mx-auto px-4 pt-6">
-        <!-- 상단 헤더 -->
-        <header class="mb-5 flex justify-between items-center bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
-            <div>
-                <h1 id="txt-app-title" class="text-lg font-bold text-gray-900">생두 품질 검사 결과 입력기</h1>
-                <p class="text-[10px] text-gray-400 font-mono">Cafe Nogales Q.C System</p>
-            </div>
-            <div class="flex items-center bg-gray-100 p-0.5 rounded-lg border border-gray-200">
-                <button type="button" onclick="changeLanguage('ko')" id="btn-lang-ko" class="px-2.5 py-1 text-xs font-bold rounded-md transition-all bg-white shadow-sm text-blue-600">KO</button>
-                <button type="button" onclick="changeLanguage('en')" id="btn-lang-en" class="px-2.5 py-1 text-xs font-bold rounded-md transition-all text-gray-400">EN</button>
-            </div>
-        </header>
+<!-- 시각적 특성 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+<button type="button" class="w-full px-4 py-3 bg-gray-50 flex justify-between items-center border-b border-gray-150 font-bold text-sm text-gray-800" onclick="toggleAccordion(this, true)">
+<span id="lbl-sec2">시각적 특성</span>
+<span class="arrow text-xs text-gray-400">▼</span>
+</button>
+<div class="accordion-content closed p-4 space-y-4">
+<div>
+<label id="lbl-probType" class="block text-xs font-semibold text-gray-600 mb-1.5">Type of Problem</label>
+<div class="grid grid-cols-1 gap-1.5" id="group_probType"></div>
+</div>
+<div>
+<label id="lbl-sizeUnif" class="block text-xs font-semibold text-gray-600 mb-1">Overall Visual-Size uniformity</label>
+<div class="grid grid-cols-3 gap-2" id="group_sizeUnif">
+<button type="button" data-value="Uniform" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Uniform</button>
+<button type="button" data-value="Average" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Average</button>
+<button type="button" data-value="Out of average" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Out of average</button>
+</div>
+</div>
+<div>
+<label id="lbl-sizeUnifComm" class="block text-xs font-semibold text-gray-600 mb-1.5">Overall Visual-Size uniformity_Comment</label>
+<div class="flex flex-col space-y-1.5" id="group_sizeUnifComm"></div>
+</div>
+<div>
+<label id="lbl-colorUnif" class="block text-xs font-semibold text-gray-600 mb-1">Overall Visual-Colour uniformity</label>
+<div class="grid grid-cols-3 gap-2" id="group_colorUnif">
+<button type="button" data-value="Uniform" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Uniform</button>
+<button type="button" data-value="Average" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Average</button>
+<button type="button" data-value="Out of average" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Out of average</button>
+</div>
+</div>
+<div>
+<label id="lbl-color" class="block text-xs font-semibold text-gray-600 mb-1">Overall Visual-Colour</label>
+<div class="grid grid-cols-1 gap-1.5" id="group_color">
+<button type="button" data-value="Dark Green" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Dark Green</button>
+<button type="button" data-value="Normal Green" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Normal Green</button>
+<button type="button" data-value="Light Green" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Light Green</button>
+<button type="button" data-value="Green & Yellow/Brown" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Green & Yellow/Brown</button>
+<button type="button" data-value="Mostly Yellow (Sour bean cannot be separated)" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Mostly Yellow (Sour bean cannot be separated)</button>
+<button type="button" data-value="Mostly Brown (Sour bean cannot be separated)" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Mostly Brown (Sour bean cannot be separated)</button>
+<button type="button" data-value="White" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">White</button>
+</div>
+</div>
+<div>
+<label id="lbl-fading" class="block text-xs font-semibold text-gray-600 mb-1">Overall Visual-Overall Fading</label>
+<div class="grid grid-cols-1 gap-1.5" id="group_fading">
+<button type="button" data-value="No Faded" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">No Faded</button>
+<button type="button" data-value="Slightly Faded" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Slightly Faded</button>
+<button type="button" data-value="Severe Faded (Partially decoloured bean cannot be separated)" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Severe Faded (Partially decoloured bean cannot be separated)</button>
+</div>
+</div>
+<div>
+<label id="lbl-colorComm" class="block text-xs font-semibold text-gray-600 mb-1.5">Overall Visual-Colour_Comment</label>
+<div class="flex flex-col space-y-1.5" id="group_colorComm"></div>
+</div>
+</div>
+</div>
 
-        <!-- 임시저장 패널 -->
-        <div class="mb-5 bg-blue-50 border border-blue-150 p-4 rounded-xl flex items-center justify-between gap-3 shadow-sm">
-            <div class="flex-1">
-                <label id="lbl-draft" class="block text-xs font-bold text-blue-800 mb-1">📁 진행 중인 임시저장 데이터 불러오기</label>
-                <select id="draftSelect" class="w-full bg-white border border-blue-200 rounded-lg p-2 text-xs text-gray-700 focus:outline-none shadow-sm">
-                    <option value="">-- 새로 작성하기 또는 목록 새로고침 --</option>
-                </select>
-            </div>
-            <button type="button" id="btn-refresh" onclick="loadDraftList()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-3 rounded-lg shadow-sm h-fit self-end transition-all">
-                🔄 새로고침
-            </button>
-        </div>
+<!-- 상세 결점두 카운팅 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+<button type="button" class="w-full px-4 py-3 bg-gray-50 flex justify-between items-center border-b border-gray-150 font-bold text-sm text-gray-800" onclick="toggleAccordion(this, true)">
+<span id="lbl-sec3">상세 결점두 카운팅</span>
+<span class="arrow text-xs text-gray-400">▼</span>
+</button>
+<div class="accordion-content closed p-4">
+<div id="defectCounters" class="grid grid-cols-1 gap-3 sm:grid-cols-2"></div>
+</div>
+</div>
 
-        <form id="qcForm" class="space-y-4">
-            <input type="hidden" id="currentRowId" value="">
+<!-- 중량 및 결점두 영향력 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+<button type="button" class="w-full px-4 py-3 bg-gray-50 flex justify-between items-center border-b border-gray-150 font-bold text-sm text-gray-800" onclick="toggleAccordion(this, true)">
+<span id="lbl-sec4">중량 및 결점두 영향력</span>
+<span class="arrow text-xs text-gray-400">▼</span>
+</button>
+<div class="accordion-content closed p-4 space-y-4">
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label id="lbl-qtyAll" class="block text-xs font-semibold text-gray-600 mb-1">Quantity-All (g)</label>
+<input type="number" id="qtyAllInput" value="500" class="w-full p-2 border border-gray-300 rounded-lg text-sm bg-gray-50 outline-none">
+</div>
+<div>
+<label id="lbl-qtyDef" class="block text-xs font-semibold text-gray-600 mb-1">Quantity-Defect (g)</label>
+<input type="number" id="qtyDefInput" class="w-full p-2 border border-gray-300 rounded-lg text-sm outline-none">
+</div>
+</div>
+<div>
+<label id="lbl-defectEffect" class="block text-xs font-semibold text-gray-600 mb-1">Defect-effect to Quality (internal)</label>
+<div class="grid grid-cols-3 gap-1.5" id="group_defectEffect">
+<button type="button" data-value="Low" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Low</button>
+<button type="button" data-value="Medium-Low" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Med-Low</button>
+<button type="button" data-value="Medium" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Medium</button>
+<button type="button" data-value="Medium-High" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Med-High</button>
+<button type="button" data-value="High" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">High</button>
+<button type="button" data-value="Did not grading" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">NoGrade</button>
+</div>
+</div>
+<div>
+<label id="lbl-defectInGrade" class="block text-xs font-semibold text-gray-600 mb-1">Defect-in same grade (internal)</label>
+<div class="grid grid-cols-3 gap-1.5" id="group_defectInGrade">
+<button type="button" data-value="Low" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Low</button>
+<button type="button" data-value="Average" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Average</button>
+<button type="button" data-value="High" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">High</button>
+<button type="button" data-value="Caution" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Caution</button>
+<button type="button" data-value="N/A" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">N/A</button>
+</div>
+</div>
+<div>
+<label id="lbl-majorDefect" class="block text-xs font-semibold text-gray-600 mb-1">Major defect</label>
+<div class="grid grid-cols-2 gap-1.5" id="group_majorDefect"></div>
+</div>
+<div>
+<label id="lbl-defectComm" class="block text-xs font-semibold text-gray-600 mb-1">Defect_Comment</label>
+<div class="flex flex-col space-y-1.5" id="group_defectComm"></div>
+</div>
+</div>
+</div>
 
-            <!-- 기본 정보 -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <button type="button" class="w-full px-4 py-3 bg-gray-50 flex justify-between items-center border-b border-gray-150 font-bold text-sm text-gray-800" onclick="toggleAccordion(this)">
-                    <span id="lbl-sec1">기본 정보</span>
-                    <span class="arrow text-xs text-gray-400">▲</span>
-                </button>
-                <div class="accordion-content p-4 space-y-3">
-                    <div>
-                        <label id="lbl-coffeeName" class="block text-xs font-semibold text-gray-600 mb-1">커피 이름</label>
-                        <input type="text" id="coffeeNameInput" required class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-400 outline-none">
-                    </div>
-                    <div>
-                        <label id="lbl-grade" class="block text-xs font-semibold text-gray-600 mb-1">Grade</label>
-                        <div class="grid grid-cols-2 gap-2" id="group_grade">
-                            <button type="button" data-value="Microlot" class="py-2 text-xs font-medium border border-gray-200 rounded-lg bg-gray-50 select-single">Microlot</button>
-                            <button type="button" data-value="Regional" class="py-2 text-xs font-medium border border-gray-200 rounded-lg bg-gray-50 select-single">Regional</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label id="lbl-gradingDate" class="block text-xs font-semibold text-gray-600 mb-1">Green Grading date</label>
-                        <input type="date" id="gradingDateInput" required class="w-full p-2 border border-gray-300 rounded-lg text-sm outline-none">
-                    </div>
-                </div>
-            </div>
+<!-- 종합 평가 -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+<button type="button" class="w-full px-4 py-3 bg-gray-50 flex justify-between items-center border-b border-gray-150 font-bold text-sm text-gray-800" onclick="toggleAccordion(this, true)">
+<span id="lbl-sec5">종합 평가</span>
+<span class="arrow text-xs text-gray-400">▼</span>
+</button>
+<div class="accordion-content closed p-4 space-y-3">
+<div>
+<label id="lbl-qualityChange" class="block text-xs font-semibold text-gray-600 mb-1">Quality change from PSS</label>
+<div class="grid grid-cols-4 gap-1.5" id="group_qualityChange">
+<button type="button" data-value="Better" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Better</button>
+<button type="button" data-value="Same" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Same</button>
+<button type="button" data-value="Worse" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Worse</button>
+<button type="button" data-value="No PSS" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">No PSS</button>
+</div>
+</div>
+<div>
+<label id="lbl-koComment" class="block text-xs font-semibold text-gray-600 mb-1">Overall Quality Comments (KO)</label>
+<textarea id="koCommentInput" rows="3" class="w-full p-2 border border-gray-300 rounded-lg text-sm outline-none"></textarea>
+</div>
+<div>
+<label id="lbl-enComment" class="block text-xs font-semibold text-gray-600 mb-1">Overall Quality Comments (EN)</label>
+<textarea id="enCommentInput" rows="3" class="w-full p-2 border border-gray-300 rounded-lg text-sm outline-none"></textarea>
+</div>
+</div>
+</div>
 
-            <!-- 시각적 특성 -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <button type="button" class="w-full px-4 py-3 bg-gray-50 flex justify-between items-center border-b border-gray-150 font-bold text-sm text-gray-800" onclick="toggleAccordion(this, true)">
-                    <span id="lbl-sec2">시각적 특성</span>
-                    <span class="arrow text-xs text-gray-400">▼</span>
-                </button>
-                <div class="accordion-content closed p-4 space-y-4">
-                    <div>
-                        <label id="lbl-probType" class="block text-xs font-semibold text-gray-600 mb-1.5">Type of Problem</label>
-                        <div class="grid grid-cols-1 gap-1.5" id="group_probType"></div>
-                    </div>
-                    <div>
-                        <label id="lbl-sizeUnif" class="block text-xs font-semibold text-gray-600 mb-1">Overall Visual-Size uniformity</label>
-                        <div class="grid grid-cols-3 gap-2" id="group_sizeUnif">
-                            <button type="button" data-value="Uniform" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Uniform</button>
-                            <button type="button" data-value="Average" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Average</button>
-                            <button type="button" data-value="Out of average" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Out of average</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label id="lbl-sizeUnifComm" class="block text-xs font-semibold text-gray-600 mb-1.5">Overall Visual-Size uniformity_Comment</label>
-                        <div class="flex flex-col space-y-1.5" id="group_sizeUnifComm"></div>
-                    </div>
-                    <div>
-                        <label id="lbl-colorUnif" class="block text-xs font-semibold text-gray-600 mb-1">Overall Visual-Colour uniformity</label>
-                        <div class="grid grid-cols-3 gap-2" id="group_colorUnif">
-                            <button type="button" data-value="Uniform" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Uniform</button>
-                            <button type="button" data-value="Average" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Average</button>
-                            <button type="button" data-value="Out of average" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Out of average</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label id="lbl-color" class="block text-xs font-semibold text-gray-600 mb-1">Overall Visual-Colour</label>
-                        <div class="grid grid-cols-1 gap-1.5" id="group_color">
-                            <button type="button" data-value="Dark Green" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Dark Green</button>
-                            <button type="button" data-value="Normal Green" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Normal Green</button>
-                            <button type="button" data-value="Light Green" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Light Green</button>
-                            <button type="button" data-value="Green & Yellow/Brown" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Green & Yellow/Brown</button>
-                            <button type="button" data-value="Mostly Yellow (Sour bean cannot be separated)" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Mostly Yellow (Sour bean cannot be separated)</button>
-                            <button type="button" data-value="Mostly Brown (Sour bean cannot be separated)" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Mostly Brown (Sour bean cannot be separated)</button>
-                            <button type="button" data-value="White" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">White</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label id="lbl-fading" class="block text-xs font-semibold text-gray-600 mb-1">Overall Visual-Overall Fading</label>
-                        <div class="grid grid-cols-1 gap-1.5" id="group_fading">
-                            <button type="button" data-value="No Faded" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">No Faded</button>
-                            <button type="button" data-value="Slightly Faded" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Slightly Faded</button>
-                            <button type="button" data-value="Severe Faded (Partially decoloured bean cannot be separated)" class="py-1.5 text-left px-3 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Severe Faded (Partially decoloured bean cannot be separated)</button>
-                        </div>
-                    </div>
-                    <!-- 💡 신규 삽입 구역: Overall Visual-Colour_Comment 버튼 그룹 컨테이너 -->
-                    <div>
-                        <label id="lbl-colorComm" class="block text-xs font-semibold text-gray-600 mb-1.5">Overall Visual-Colour_Comment</label>
-                        <div class="flex flex-col space-y-1.5" id="group_colorComm"></div>
-                    </div>
-                </div>
-            </div>
+<div class="grid grid-cols-2 gap-4 pt-4">
+<button type="button" id="btn-draft" onclick="submitData('Draft')" class="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-md transition-all text-sm">
+💾 임시 저장
+</button>
+<button type="button" id="btn-complete" onclick="submitData('Completed')" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all text-sm">
+🚀 검사 완료
+</button>
+</div>
+</form>
+</div>
 
-            <!-- 상세 결점두 카운팅 -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <button type="button" class="w-full px-4 py-3 bg-gray-50 flex justify-between items-center border-b border-gray-150 font-bold text-sm text-gray-800" onclick="toggleAccordion(this, true)">
-                    <span id="lbl-sec3">상세 결점두 카운팅</span>
-                    <span class="arrow text-xs text-gray-400">▼</span>
-                </button>
-                <div class="accordion-content closed p-4">
-                    <div id="defectCounters" class="grid grid-cols-1 gap-3 sm:grid-cols-2"></div>
-                </div>
-            </div>
+<script>
+// 🛑 [구글 앱스크립트 웹앱 주소 세팅 - 기존 주소를 안전하게 유지]
+const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzFfUtFnDmk5FyvAiknHn6u6knNchc-iv-BJu1yLqonrxkXQdPzYAgDtUVYU-yBuc-V/exec";
 
-            <!-- 중량 및 결점두 영향력 -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <button type="button" class="w-full px-4 py-3 bg-gray-50 flex justify-between items-center border-b border-gray-150 font-bold text-sm text-gray-800" onclick="toggleAccordion(this, true)">
-                    <span id="lbl-sec4">중량 및 결점두 영향력</span>
-                    <span class="arrow text-xs text-gray-400">▼</span>
-                </button>
-                <div class="accordion-content closed p-4 space-y-4">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label id="lbl-qtyAll" class="block text-xs font-semibold text-gray-600 mb-1">Quantity-All (g)</label>
-                            <input type="number" id="qtyAllInput" value="500" class="w-full p-2 border border-gray-300 rounded-lg text-sm bg-gray-50 outline-none">
-                        </div>
-                        <div>
-                            <label id="lbl-qtyDef" class="block text-xs font-semibold text-gray-600 mb-1">Quantity-Defect (g)</label>
-                            <input type="number" id="qtyDefInput" class="w-full p-2 border border-gray-300 rounded-lg text-sm outline-none">
-                        </div>
-                    </div>
-                    <div>
-                        <label id="lbl-defectEffect" class="block text-xs font-semibold text-gray-600 mb-1">Defect-effect to Quality (internal)</label>
-                        <div class="grid grid-cols-3 gap-1.5" id="group_defectEffect">
-                            <button type="button" data-value="Low" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Low</button>
-                            <button type="button" data-value="Medium-Low" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Med-Low</button>
-                            <button type="button" data-value="Medium" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Medium</button>
-                            <button type="button" data-value="Medium-High" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Med-High</button>
-                            <button type="button" data-value="High" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">High</button>
-                            <button type="button" data-value="Did not grading" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">NoGrade</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label id="lbl-defectInGrade" class="block text-xs font-semibold text-gray-600 mb-1">Defect-in same grade (internal)</label>
-                        <div class="grid grid-cols-3 gap-1.5" id="group_defectInGrade">
-                            <button type="button" data-value="Low" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Low</button>
-                            <button type="button" data-value="Average" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Average</button>
-                            <button type="button" data-value="High" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">High</button>
-                            <button type="button" data-value="Caution" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Caution</button>
-                            <button type="button" data-value="N/A" class="py-1 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">N/A</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label id="lbl-majorDefect" class="block text-xs font-semibold text-gray-600 mb-1">Major defect</label>
-                        <div class="grid grid-cols-2 gap-1.5" id="group_majorDefect"></div>
-                    </div>
-                    <div>
-                        <label id="lbl-defectComm" class="block text-xs font-semibold text-gray-600 mb-1">Defect_Comment</label>
-                        <div class="flex flex-col space-y-1.5" id="group_defectComm"></div>
-                    </div>
-                </div>
-            </div>
+let currentLang = "ko";
+let activeDraftsList = [];
 
-            <!-- 종합 평가 -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <button type="button" class="w-full px-4 py-3 bg-gray-50 flex justify-between items-center border-b border-gray-150 font-bold text-sm text-gray-800" onclick="toggleAccordion(this, true)">
-                    <span id="lbl-sec5">종합 평가</span>
-                    <span class="arrow text-xs text-gray-400">▼</span>
-                </button>
-                <div class="accordion-content closed p-4 space-y-3">
-                    <div>
-                        <label id="lbl-qualityChange" class="block text-xs font-semibold text-gray-600 mb-1">Quality change from PSS</label>
-                        <div class="grid grid-cols-4 gap-1.5" id="group_qualityChange">
-                            <button type="button" data-value="Better" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Better</button>
-                            <button type="button" data-value="Same" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Same</button>
-                            <button type="button" data-value="Worse" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">Worse</button>
-                            <button type="button" data-value="No PSS" class="py-1.5 text-xs border border-gray-200 rounded-lg bg-gray-50 select-single">No PSS</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label id="lbl-koComment" class="block text-xs font-semibold text-gray-600 mb-1">Overall Quality Comments (KO)</label>
-                        <textarea id="koCommentInput" rows="3" class="w-full p-2 border border-gray-300 rounded-lg text-sm outline-none"></textarea>
-                    </div>
-                    <div>
-                        <label id="lbl-enComment" class="block text-xs font-semibold text-gray-600 mb-1">Overall Quality Comments (EN)</label>
-                        <textarea id="enCommentInput" rows="3" class="w-full p-2 border border-gray-300 rounded-lg text-sm outline-none"></textarea>
-                    </div>
-                </div>
-            </div>
+// 다국어 UI 라벨 사전
+const UI_LANG = {
+ko: {
+title: "생두 품질 검사 결과 입력기",
+draftLabel: "📁 진행 중인 임시저장 데이터 불러오기",
+draftEmpty: "-- 새로 작성하기 또는 목록 새로고침 --",
+refreshBtn: "🔄 새로고침",
+sec1: "기본 정보",
+sec2: "시각적 특성",
+sec3: "상세 결점두 카운팅",
+sec4: "중량 및 결점두 영향력",
+sec5: "종합 평가",
+coffeeName: "커피 이름",
+grade: "Grade",
+gradingDate: "Green Grading date",
+probType: "Type of Problem",
+sizeUnif: "Overall Visual-Size uniformity",
+sizeUnifComm: "Overall Visual-Size uniformity_Comment",
+colorUnif: "Overall Visual-Colour uniformity",
+color: "Overall Visual-Colour",
+fading: "Overall Visual-Overall Fading",
+colorComm: "Overall Visual-Colour_Comment",
+qtyAll: "Quantity-All (g)",
+qtyDef: "Quantity-Defect (g)",
+defectEffect: "Defect-effect to Quality (internal)",
+defectInGrade: "Defect-in same grade (internal)",
+majorDefect: "Major defect",
+defectComm: "Defect_Comment",
+qualityChange: "Quality change from PSS",
+koComment: "Overall Quality Comments (KO)",
+enComment: "Overall Quality Comments (EN)",
+btnDraft: "💾 임시 저장",
+btnComplete: "🚀 검사 완료"
+},
+en: {
+title: "Green Bean Q.C Result Inputter",
+draftLabel: "📁 Load Draft QC Data",
+draftEmpty: "-- Create New or Refresh List --",
+refreshBtn: "🔄 Refresh",
+sec1: "Basic Information",
+sec2: "Visual Characteristics",
+sec3: "Detailed Defect Counting",
+sec4: "Weight & Defect Influence",
+sec5: "Overall Evaluation",
+coffeeName: "Coffee Name",
+grade: "Grade",
+gradingDate: "Green Grading date",
+probType: "Type of Problem",
+sizeUnif: "Overall Visual-Size Uniformity",
+sizeUnifComm: "Overall Visual-Size Uniformity Comment",
+colorUnif: "Overall Visual-Colour Uniformity",
+color: "Overall Visual-Colour",
+fading: "Overall Visual-Overall Fading",
+colorComm: "Overall Visual-Colour_Comment",
+qtyAll: "Quantity-All (g)",
+qtyDef: "Quantity-Defect (g)",
+defectEffect: "Defect-effect to Quality (internal)",
+defectInGrade: "Defect-in same grade (internal)",
+majorDefect: "Major Defect",
+defectComm: "Defect Comment",
+qualityChange: "Quality Change from PSS",
+koComment: "Overall Quality Comments (KO)",
+enComment: "Overall Quality Comments (EN)",
+btnDraft: "💾 Save Draft",
+btnComplete: "🚀 Complete Inspection"
+}
+};
 
-            <div class="grid grid-cols-2 gap-4 pt-4">
-                <button type="button" id="btn-draft" onclick="submitData('Draft')" class="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow-md transition-all text-sm">
-                    💾 임시 저장
-                </button>
-                <button type="button" id="btn-complete" onclick="submitData('Completed')" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all text-sm">
-                    🚀 검사 완료
-                </button>
-            </div>
-        </form>
-    </div>
+const DICTIONARY = {
+problem: {
+"높은 수분 함량에 의해 품질 저하됨": "Quality deteriorated by high moisture",
+"높은 온도로 인해 품질 저하": "Quality deteriorated by high temperature",
+"높은 수분 함량에 의한 품질 저하 위험": "Risk of quality deterioration by high moisture",
+"건조 불량": "Drying issue",
+"드라이 밀 공정 불량": "Dry mill process failure",
+"bag/box별 품질 불균일": "Non-uniform quality per bag/box",
+"배아 손상됨": "Embryos damaged",
+"이물질": "Foreign matter",
+"곰팡이": "Fungus",
+"높은 결점두 함량": "High defect rate",
+"보관 불량": "Storage",
+"발효": "Fermentation",
+"품질 문제 없음": "No quality issue"
+},
+sizeComment: {
+"규격 외 작은 생두 포함 (#12 이하)": "Under-sized tiny beans included (under #12).",
+"규격 외 큰 생두 포함 (#20 이상)": "Over-sized large beans included (over #20).",
+"생두 사이의 크기 차이가 매우 높음": "Size difference among green beans is very high.",
+"생두 사이의 크기 차이가 있음": "Size difference among green beans exists.",
+"품질 문제 없음": "No quality issue"
+},
+colorComment: {
+"생두의 색상이 노란색이지만 품질은 정상임": "Green bean color is yellow, but quality is normal.",
+"생두의 색상이 갈색이지만 품질은 정상임": "Green bean color is brown, but quality is normal.",
+"생두의 색상이 Dark green이지만 품질은 정상임": "Green bean color is dark green, but quality is normal.",
+"생두의 색상이 Light green이지만 품질은 정상임": "Green bean color is light green, but quality is normal.",
+"노란색 생두가 다수 포함되어 있지만 품질은 정상임": "Many yellow beans included, but quality is normal.",
+"갈색 생두가 다수 포함되어 있지만 품질은 정상임": "Many brown beans included, but quality is normal.",
+"생두의 색상이 노란색이며 과발효 되었음": "Green bean color is yellow and over-fermented.",
+"생두의 색상이 갈색이며 과발효 되었음": "Green bean color is brown and over-fermented.",
+"생두의 색상이 Dark green이며 건조가 덜 되었음": "Green bean color is dark green and under-dried.",
+"생두의 색상이 Light green이며 과발효 되었음": "Green bean color is light green and over-fermented.",
+"생두의 색상이 Light green이며 유기물이 손실되었음": "Green bean color is light green and organic matter lost.",
+"노란색 생두가 다수 포함되어 있으며 과발효되었음": "Many yellow beans included and over-fermented.",
+"갈색 생두가 다수 포함되어 있으며 과발효되었음": "Many brown beans included and over-fermented.",
+"생두의 색상이 흰색이며 유기물이 손실되었음": "Green bean color is white and organic matter lost.",
+"생두의 표면이 약간 바랬음": "Surface of green bean is slightly faded.",
+"일부 생두의 표면이 약간 바랬음": "Some green bean is slightly faded.",
+"녹색/흰색/노란색/갈색 생두가 섞였지만 품질은 정상임": "Green/White/Yellow/Brown color beans mixed, but quality is normal.",
+"품질 문제 없음": "No quality issue"
+},
+defectComment: {
+"생두의 크기가 작기 때문에 실제 디펙트 빈의 함량에 비해 디펙트 점수가 높음.": "Defect score is high compared to actual defect bean content due to small bean size.",
+"생두의 크기가 크기 때문에 실제 디펙트 빈의 함량에 비해 디펙트 점수가 낮음.": "Defect score is low compared to actual defect bean content due to large bean size.",
+"품질에 강한 영향을 미치는 디펙트빈이 적으므로 생두의 실제 품질은 디펙트 점수에 비해 좋음.": "Actual green bean quality is better than defect score because there are few defect beans that strongly affect quality.",
+"품질에 강한 영향을 미치는 디펙트빈이 포함되어 있음.": "Defect beans that strongly affect quality are included.",
+"정상 생두와 사워빈을 구분할 수 없기 때문에 사워빈을 분류하지 않음. 실제 디펙트 함량은 보고된 것보다 높음.": "Sour beans not sorted because it is impossible to distinguish between normal beans and sour beans. Actual defect rate is higher than reported.",
+"정상 생두와 탈색된 생두를 구분할 수 없기 때문에 Partially Discolored를 분류하지 않음. 실제 디펙트 함량은 보고된 것보다 높음.": "Partially Discolored beans not sorted because it is impossible to distinguish between normal beans and decolored beans. Actual defect rate is higher than reported.",
+"드라이 밀에서 분류 공정을 통해 제거되어야 하는 작은 생두 파편이 발견됨.": "Small green bean fragments found that should have been removed during dry mill sorting process.",
+"생두 다수에 약한 백화가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Many beans show slightly whitening, but were not classified as defects due to low intensity.",
+"생두 대부분에 약한 백화가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Most beans show slightly whitening, but were not classified as defects due to low intensity.",
+"생두 다수에 백화(Fade)가 진행되어 분류가 어려움. 실제 디펙트 함량은 그린 그레이딩 결과보다 높음.": "Many beans are faded, making sorting difficult. Actual defect rate is higher than green grading results.",
+"생두 다수에 약한 사워가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Many beans show slightly sour, but were not classified as defects due to low intensity.",
+"생두 대부분에 약한 사워가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Most beans show slightly sourness, but were not classified as defects due to low intensity.",
+"생두 다수에 사워가 진행되어 분류가 어려움. 실제 디펙트 함량은 그린 그레이딩 결과보다 높음.": "Many beans are sour, making sorting difficult. Actual defect rate is higher than green grading results.",
+"생두 다수에 미세한 결정화가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Many beans show fine crystallization, but were not classified as defects due to low intensity.",
+"생두 대부분에 미세한 결정화가 진행되었으나 강도가 낮아서 디펙트로 분류되지 않음.": "Most beans show fine crystallization, but were not classified as defects due to low intensity.",
+"생두 다수에 결정화가 진행되어 분류가 어려움. 실제 디펙트 함량은 그린 그레이딩 결과보다 높음.": "Many beans show crystallization, making sorting difficult. Actual defect rate is higher than green grading results.",
+"품질 문제 없음": "No quality issue"
+}
+};
 
-    <script>
-        let currentLang = "ko";
-        let activeDraftsList = [];
+const DEFECT_TYPES = [
+"Full black (1)", "Partial Black (2)", "Full sour (1)", "Partial Sour (2)",
+"Reposado (1)", "Cardenello (1)", "Partial Cardenillo (2)", "Butter bean (1)",
+"Foreign matter (1)", "Immature/Unfipe (5)", "Deformed/Withered (5)",
+"Elephant(Shell, Core)", "Actual Withered", "Flatted bean (5)", "Broken/Chipped (5)",
+"Insect damage (5)", "Slightly Insect damage (10)", "Over dried (5)",
+"Under dried (5)", "Crystalised", "Partially decoloured"
+];
 
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('gradingDateInput').value = new Date().toISOString().substring(0, 10);
-            renderLanguageUI();
-            buildDefectCounters();
-            setupInteractions();
-            
-            if (GOOGLE_WEB_APP_URL.includes("여기에_")) {
-                alert("🛑 [안내] 코드 맨 윗줄의 GOOGLE_WEB_APP_URL에 배포받으신 구글 스크립트 웹앱 주소를 입력하셔야 스프레드시트와 동기화가 이루어집니다.");
-            } else {
-                loadDraftList();
-            }
-        });
+window.addEventListener('DOMContentLoaded', () => {
+document.getElementById('gradingDateInput').value = new Date().toISOString().substring(0, 10);
+renderLanguageUI();
+buildDefectCounters();
+setupInteractions();
 
-        function toggleAccordion(button, forceClose = false) {
-            const content = button.nextElementSibling;
-            const arrow = button.querySelector('.arrow');
-            
-            if (forceClose && !content.style.maxHeight && !content.classList.contains('closed')) {
-                content.classList.add('closed');
-                arrow.textContent = '▼';
-                return;
-            }
+if (GOOGLE_WEB_APP_URL.includes("여기에_")) {
+alert("🛑 [안내] 코드 맨 윗줄의 GOOGLE_WEB_APP_URL에 배포받으신 구글 스크립트 웹앱 주소를 입력하셔야 스프레드시트와 동기화가 이루어집니다.");
+} else {
+loadDraftList();
+}
+});
 
-            if (content.classList.contains('closed')) {
-                content.classList.remove('closed');
-                arrow.textContent = '▲';
-            } else {
-                content.classList.add('closed');
-                arrow.textContent = '▼';
-            }
-        }
+function toggleAccordion(button, forceClose = false) {
+const content = button.nextElementSibling;
+const arrow = button.querySelector('.arrow');
 
-        function changeLanguage(lang) {
-            if(lang === currentLang) return;
-            currentLang = lang;
-            
-            const btnKo = document.getElementById('btn-lang-ko');
-            const btnEn = document.getElementById('btn-lang-en');
-            if(lang === 'ko') {
-                btnKo.className = "px-2.5 py-1 text-xs font-bold rounded-md transition-all bg-white shadow-sm text-blue-600";
-                btnEn.className = "px-2.5 py-1 text-xs font-bold rounded-md transition-all text-gray-400";
-            } else {
-                btnKo.className = "px-2.5 py-1 text-xs font-bold rounded-md transition-all text-gray-400";
-                btnEn.className = "px-2.5 py-1 text-xs font-bold rounded-md transition-all bg-white shadow-sm text-blue-600";
-            }
-            renderLanguageUI();
-        }
+if (forceClose && !content.style.maxHeight && !content.classList.contains('closed')) {
+content.classList.add('closed');
+arrow.textContent = '▼';
+return;
+}
 
-        function renderLanguageUI() {
-            const data = UI_LANG[currentLang];
-            document.getElementById('txt-app-title').textContent = data.title;
-            document.getElementById('lbl-draft').textContent = data.draftLabel;
-            document.getElementById('btn-refresh').textContent = data.refreshBtn;
-            document.getElementById('lbl-sec1').textContent = data.sec1;
-            document.getElementById('lbl-sec2').textContent = data.sec2;
-            document.getElementById('lbl-sec3').textContent = data.sec3;
-            document.getElementById('lbl-sec4').textContent = data.sec4;
-            document.getElementById('lbl-sec5').textContent = data.sec5;
-            document.getElementById('lbl-coffeeName').textContent = data.coffeeName;
-            document.getElementById('lbl-grade').textContent = data.grade;
-            document.getElementById('lbl-gradingDate').textContent = data.gradingDate;
-            document.getElementById('lbl-probType').textContent = data.probType;
-            document.getElementById('lbl-sizeUnif').textContent = data.sizeUnif;
-            document.getElementById('lbl-sizeUnifComm').textContent = data.sizeUnifComm;
-            document.getElementById('lbl-colorUnif').textContent = data.colorUnif;
-            document.getElementById('lbl-color').textContent = data.color;
-            document.getElementById('lbl-fading').textContent = data.fading;
-            document.getElementById('lbl-colorComm').textContent = data.colorComm;
-            document.getElementById('lbl-qtyAll').textContent = data.qtyAll;
-            document.getElementById('lbl-qtyDef').textContent = data.qtyDef;
-            document.getElementById('lbl-defectEffect').textContent = data.defectEffect;
-            document.getElementById('lbl-defectInGrade').textContent = data.defectInGrade;
-            document.getElementById('lbl-majorDefect').textContent = data.majorDefect;
-            document.getElementById('lbl-defectComm').textContent = data.defectComm;
-            document.getElementById('lbl-qualityChange').textContent = data.qualityChange;
-            document.getElementById('lbl-koComment').textContent = data.koComment;
-            document.getElementById('lbl-enComment').textContent = data.enComment;
-            document.getElementById('btn-draft').textContent = data.btnDraft;
-            document.getElementById('btn-complete').textContent = data.btnComplete;
-            rebuildDynamicButtons();
-        }
+if (content.classList.contains('closed')) {
+content.classList.remove('closed');
+arrow.textContent = '▲';
+} else {
+content.classList.add('closed');
+arrow.textContent = '▼';
+}
+}
 
-        function rebuildDynamicButtons() {
-            const activeValues = {};
-            document.querySelectorAll('.active-btn').forEach(b => {
-                const grp = b.parentElement.id;
-                if(grp) {
-                    if(!activeValues[grp]) activeValues[grp] = [];
-                    activeValues[grp].push(b.dataset.value);
-                }
-            });
+function changeLanguage(lang) {
+if(lang === currentLang) return;
+currentLang = lang;
+const btnKo = document.getElementById('btn-lang-ko');
+const btnEn = document.getElementById('btn-lang-en');
 
-            const probGroup = document.getElementById('group_probType');
-            probGroup.innerHTML = '';
-            Object.keys(DICTIONARY.problem).forEach(ko => {
-                const label = (currentLang === 'ko') ? ko : DICTIONARY.problem[ko];
-                probGroup.innerHTML += `<button type="button" data-value="${ko}" class="py-2 px-3.5 text-left text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 select-multi transition-all">${label}</button>`;
-            });
+if(lang === 'ko') {
+btnKo.className = "px-2.5 py-1 text-xs font-bold rounded-md transition-all bg-white shadow-sm text-blue-600";
+btnEn.className = "px-2.5 py-1 text-xs font-bold rounded-md transition-all text-gray-400";
+} else {
+btnKo.className = "px-2.5 py-1 text-xs font-bold rounded-md transition-all text-gray-400";
+btnEn.className = "px-2.5 py-1 text-xs font-bold rounded-md transition-all bg-white shadow-sm text-blue-600";
+}
+renderLanguageUI();
+}
 
-            const sizeGroup = document.getElementById('group_sizeUnifComm');
-            sizeGroup.innerHTML = '';
-            Object.keys(DICTIONARY.sizeComment).forEach(ko => {
-                const label = (currentLang === 'ko') ? ko : DICTIONARY.sizeComment[ko];
-                sizeGroup.innerHTML += `<button type="button" data-value="${ko}" class="py-2 px-3.5 text-left text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 select-single transition-all">${label}</button>`;
-            });
+function renderLanguageUI() {
+const data = UI_LANG[currentLang];
+document.getElementById('txt-app-title').textContent = data.title;
+document.getElementById('lbl-draft').textContent = data.draftLabel;
+document.getElementById('btn-refresh').textContent = data.refreshBtn;
+document.getElementById('lbl-sec1').textContent = data.sec1;
+document.getElementById('lbl-sec2').textContent = data.sec2;
+document.getElementById('lbl-sec3').textContent = data.sec3;
+document.getElementById('lbl-sec4').textContent = data.sec4;
+document.getElementById('lbl-sec5').textContent = data.sec5;
+document.getElementById('lbl-coffeeName').textContent = data.coffeeName;
+document.getElementById('lbl-grade').textContent = data.grade;
+document.getElementById('lbl-gradingDate').textContent = data.gradingDate;
+document.getElementById('lbl-probType').textContent = data.probType;
+document.getElementById('lbl-sizeUnif').textContent = data.sizeUnif;
+document.getElementById('lbl-sizeUnifComm').textContent = data.sizeUnifComm;
+document.getElementById('lbl-colorUnif').textContent = data.colorUnif;
+document.getElementById('lbl-color').textContent = data.color;
+document.getElementById('lbl-fading').textContent = data.fading;
+document.getElementById('lbl-colorComm').textContent = data.colorComm;
+document.getElementById('lbl-qtyAll').textContent = data.qtyAll;
+document.getElementById('lbl-qtyDef').textContent = data.qtyDef;
+document.getElementById('lbl-defectEffect').textContent = data.defectEffect;
+document.getElementById('lbl-defectInGrade').textContent = data.defectInGrade;
+document.getElementById('lbl-majorDefect').textContent = data.majorDefect;
+document.getElementById('lbl-defectComm').textContent = data.defectComm;
+document.getElementById('lbl-qualityChange').textContent = data.qualityChange;
+document.getElementById('lbl-koComment').textContent = data.koComment;
+document.getElementById('lbl-enComment').textContent = data.enComment;
+document.getElementById('btn-draft').textContent = data.btnDraft;
+document.getElementById('btn-complete').textContent = data.btnComplete;
+rebuildDynamicButtons();
+}
 
-            // 💡 신규 수용 사항: Overall Visual-Colour_Comment 버튼 엔진 출력 연산
-            const colorCommGroup = document.getElementById('group_colorComm');
-            colorCommGroup.innerHTML = '';
-            Object.keys(DICTIONARY.colorComment).forEach(ko => {
-                const label = (currentLang === 'ko') ? ko : DICTIONARY.colorComment[ko];
-                colorCommGroup.innerHTML += `<button type="button" data-value="${ko}" class="py-2 px-3.5 text-left text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 select-single transition-all">${label}</button>`;
-            });
+function rebuildDynamicButtons() {
+const activeValues = {};
+document.querySelectorAll('.active-btn').forEach(b => {
+const grp = b.parentElement.id;
+if(grp) {
+if(!activeValues[grp]) activeValues[grp] = [];
+activeValues[grp].push(b.dataset.value);
+}
+});
 
-            const majorList = ["Sour (Yellow/Brown)", "Insect (Bug)", "Broken (Broken/Cracked)", "Shell/Elephant (Deformed)", "Immature (Unripe)", "Discolored (Faded)", "Withered", "Crystallized", "Under dried", "None", "N/A"];
-            const majorGroup = document.getElementById('group_majorDefect');
-            majorGroup.innerHTML = '';
-            majorList.forEach(val => {
-                majorGroup.innerHTML += `<button type="button" data-value="${val}" class="py-2 px-2.5 text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 select-multi transition-all">${val}</button>`;
-            });
+const probGroup = document.getElementById('group_probType');
+probGroup.innerHTML = '';
+Object.keys(DICTIONARY.problem).forEach(ko => {
+const label = (currentLang === 'ko') ? ko : DICTIONARY.problem[ko];
+probGroup.innerHTML += `<button type="button" data-value="${ko}" class="py-2 px-3.5 text-left text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 select-multi transition-all">${label}</button>`;
+});
 
-            const defCommentGroup = document.getElementById('group_defectComm');
-            defCommentGroup.innerHTML = '';
-            Object.keys(DICTIONARY.defectComment).forEach(ko => {
-                const label = (currentLang === 'ko') ? ko : DICTIONARY.defectComment[ko];
-                defCommentGroup.innerHTML += `<button type="button" data-value="${ko}" class="py-2.5 px-3 text-left text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 select-multi transition-all">${label}</button>`;
-            });
+const sizeGroup = document.getElementById('group_sizeUnifComm');
+sizeGroup.innerHTML = '';
+Object.keys(DICTIONARY.sizeComment).forEach(ko => {
+const label = (currentLang === 'ko') ? ko : DICTIONARY.sizeComment[ko];
+sizeGroup.innerHTML += `<button type="button" data-value="${ko}" class="py-2 px-3.5 text-left text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 select-single transition-all">${label}</button>`;
+});
 
-            Object.keys(activeValues).forEach(grpId => {
-                const grp = document.getElementById(grpId);
-                if(grp) {
-                    activeValues[grpId].forEach(val => {
-                        const target = grp.querySelector(`[data-value="${val}"]`);
-                        if(target) target.classList.add('active-btn');
-                    });
-                }
-            });
-        }
+const colorCommGroup = document.getElementById('group_colorComm');
+colorCommGroup.innerHTML = '';
+Object.keys(DICTIONARY.colorComment).forEach(ko => {
+const label = (currentLang === 'ko') ? ko : DICTIONARY.colorComment[ko];
+colorCommGroup.innerHTML += `<button type="button" data-value="${ko}" class="py-2 px-3.5 text-left text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 select-single transition-all">${label}</button>`;
+});
 
-        function buildDefectCounters() {
-            const container = document.getElementById('defectCounters');
-            container.innerHTML = '';
-            DEFECT_TYPES.forEach((name, index) => {
-                container.innerHTML += `
-                    <div class="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between shadow-sm">
-                        <span class="text-xs font-bold text-gray-700 break-words pr-2 flex-1">${name}</span>
-                        <div class="flex items-center space-x-1 shrink-0 w-28 justify-end">
-                            <button type="button" onclick="stepCount(${index}, -1)" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg font-bold text-sm select-none flex items-center justify-center text-gray-600">-</button>
-                            <input type="number" id="defect_${index}" value="0" min="0" class="w-10 h-8 text-center bg-white border border-gray-300 rounded-lg text-xs font-bold font-mono outline-none shadow-inner">
-                            <button type="button" onclick="stepCount(${index}, 1)" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg font-bold text-sm select-none flex items-center justify-center text-gray-600">+</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
+const majorList = ["Sour (Yellow/Brown)", "Insect (Bug)", "Broken (Broken/Cracked)", "Shell/Elephant (Deformed)", "Immature (Unripe)", "Discolored (Faded)", "Withered", "Crystallized", "Under dried", "None", "N/A"];
+const majorGroup = document.getElementById('group_majorDefect');
+majorGroup.innerHTML = '';
+majorList.forEach(val => {
+majorGroup.innerHTML += `<button type="button" data-value="${val}" class="py-2 px-2.5 text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 select-multi transition-all">${val}</button>`;
+});
 
-        function stepCount(index, amount) {
-            const input = document.getElementById(`defect_${index}`);
-            let val = parseInt(input.value) || 0;
-            val += amount;
-            if(val < 0) val = 0;
-            input.value = val;
-        }
+const defCommentGroup = document.getElementById('group_defectComm');
+defCommentGroup.innerHTML = '';
+Object.keys(DICTIONARY.defectComment).forEach(ko => {
+const label = (currentLang === 'ko') ? ko : DICTIONARY.defectComment[ko];
+defCommentGroup.innerHTML += `<button type="button" data-value="${ko}" class="py-2.5 px-3 text-left text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 select-multi transition-all">${label}</button>`;
+});
 
-        function setupInteractions() {
-            document.addEventListener('click', function(e) {
-                if(e.target && e.target.classList.contains('select-single')) {
-                    const parent = e.target.parentElement;
-                    parent.querySelectorAll('.select-single').forEach(b => b.classList.remove('active-btn'));
-                    e.target.classList.add('active-btn');
-                }
-            });
+Object.keys(activeValues).forEach(grpId => {
+const grp = document.getElementById(grpId);
+if(grp) {
+activeValues[grpId].forEach(val => {
+const target = grp.querySelector(`[data-value="${val}"]`);
+if(target) target.classList.add('active-btn');
+});
+}
+});
+}
 
-            document.addEventListener('click', function(e) {
-                if(e.target && e.target.classList.contains('select-multi')) {
-                    e.target.classList.toggle('active-btn');
-                }
-            });
+function buildDefectCounters() {
+const container = document.getElementById('defectCounters');
+container.innerHTML = '';
+DEFECT_TYPES.forEach((name, index) => {
+container.innerHTML += `
+<div class="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between shadow-sm">
+<span class="text-xs font-bold text-gray-700 break-words pr-2 flex-1">${name}</span>
+<div class="flex items-center space-x-1 shrink-0 w-28 justify-end">
+<button type="button" onclick="stepCount(${index}, -1)" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg font-bold text-sm select-none flex items-center justify-center text-gray-600">-</button>
+<input type="number" id="defect_${index}" value="0" min="0" class="w-10 h-8 text-center bg-white border border-gray-300 rounded-lg text-xs font-bold font-mono outline-none shadow-inner">
+<button type="button" onclick="stepCount(${index}, 1)" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg font-bold text-sm select-none flex items-center justify-center text-gray-600">+</button>
+</div>
+</div>
+`;
+});
+}
 
-            document.getElementById('draftSelect').addEventListener('change', function() {
-                loadSelectedDraft(this.value);
-            });
-        }
+function stepCount(index, amount) {
+const input = document.getElementById(`defect_${index}`);
+let val = parseInt(input.value) || 0;
+val += amount;
+if(val < 0) val = 0;
+input.value = val;
+}
 
-        function getSingleValue(groupId) {
-            const active = document.getElementById(groupId).querySelector('.active-btn');
-            return active ? active.dataset.value : "";
-        }
-        function setSingleValue(groupId, value) {
-            const parent = document.getElementById(groupId);
-            parent.querySelectorAll('.select-single').forEach(b => b.classList.remove('active-btn'));
-            if(!value) return;
-            const target = parent.querySelector(`[data-value="${value}"]`);
-            if(target) target.classList.add('active-btn');
-        }
+function setupInteractions() {
+document.addEventListener('click', function(e) {
+if(e.target && e.target.classList.contains('select-single')) {
+const parent = e.target.parentElement;
+parent.querySelectorAll('.select-single').forEach(b => b.classList.remove('active-btn'));
+e.target.classList.add('active-btn');
+}
+});
 
-        document.getElementById('qcForm').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-                e.preventDefault();
-            }
-        });
+document.addEventListener('click', function(e) {
+if(e.target && e.target.classList.contains('select-multi')) {
+e.target.classList.toggle('active-btn');
+}
+});
 
-        function getMultiValues(groupId) {
-            const actives = document.getElementById(groupId).querySelectorAll('.active-btn');
-            return Array.from(actives).map(b => b.dataset.value);
-        }
-        function setMultiValues(groupId, valuesArray) {
-            const parent = document.getElementById(groupId);
-            parent.querySelectorAll('.select-multi').forEach(b => b.classList.remove('active-btn'));
-            if(!valuesArray || valuesArray.length === 0) return;
-            valuesArray.forEach(val => {
-                const target = parent.querySelector(`[data-value="${val}"]`);
-                if(target) target.classList.add('active-btn');
-            });
-        }
+document.getElementById('draftSelect').addEventListener('change', function() {
+loadSelectedDraft(this.value);
+});
+}
 
-        function loadDraftList() {
-            if (GOOGLE_WEB_APP_URL.includes("여기에_")) return;
-            const select = document.getElementById('draftSelect');
-            const defaultTxt = UI_LANG[currentLang].draftEmpty;
-            select.innerHTML = `<option value="">⏳ Syncing...</option>`;
-            
-            fetch(`${GOOGLE_WEB_APP_URL}?formType=qc`)
-            .then(res => res.json())
-            .then(data => {
-                activeDraftsList = data;
-                select.innerHTML = `<option value="">${defaultTxt}</option>`;
-                if(data.length === 0) return;
-                data.forEach(item => {
-                    const name = item.fields["Coffee"] || "Unknown Bean";
-                    const date = item.fields["Green Grading date"] || "No Date"; 
-                    select.innerHTML += `<option value="${item.rowId}">${name} (${date.substring(0,10)})</option>`;
-                });
-            })
-            .catch(err => {
-                alert("🛑 [Error] 임시저장 목록 갱신에 실패했습니다. 구글 계정 배포 권한이나 URL 주소를 다시 한 번 확인하세요.");
-                console.error(err);
-                select.innerHTML = `<option value="">Network Sync Error</option>`;
-            });
-        }
+function getSingleValue(groupId) {
+const active = document.getElementById(groupId).querySelector('.active-btn');
+return active ? active.dataset.value : "";
+}
 
-        function loadSelectedDraft(rowId) {
-            if(!rowId) {
-                document.getElementById('qcForm').reset();
-                document.getElementById('currentRowId').value = "";
-                document.getElementById('qtyAllInput').value = "500";
-                document.querySelectorAll('.active-btn').forEach(b => b.classList.remove('active-btn'));
-                return;
-            }
-            
-            const match = activeDraftsList.find(d => d.rowId == rowId);
-            if(!match) return;
+function setSingleValue(groupId, value) {
+const parent = document.getElementById(groupId);
+parent.querySelectorAll('.select-single').forEach(b => b.classList.remove('active-btn'));
+if(!value) return;
+const target = parent.querySelector(`[data-value="${value}"]`);
+if(target) target.classList.add('active-btn');
+}
 
-            var f = match.fields;
-            document.getElementById('currentRowId').value = rowId;
-            document.getElementById('coffeeNameInput').value = f["Coffee"] || "";
-            setSingleValue('group_grade', f["Grade"]);
-            document.getElementById('gradingDateInput').value = f["Green Grading date"] ? f["Green Grading date"].substring(0,10) : "";
-            setSingleValue('group_qualityChange', f["Quality change from PSS"]);
-            document.getElementById('enCommentInput').value = f["(EN)Overall Quality Comments"] || "";
-            document.getElementById('koCommentInput').value = f["(KO)Overall Quality Comments"] || "";
+document.getElementById('qcForm').addEventListener('keydown', function(e) {
+if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+e.preventDefault();
+}
+});
 
-            if(f["Type of problem"]) {
-                const rawEns = f["Type of problem"].split(', ');
-                setMultiValues('group_probType', Object.keys(DICTIONARY.problem).filter(k => rawEns.includes(DICTIONARY.problem[k])));
-            }
-            
-            setSingleValue('group_sizeUnif', f["Overall Visual-Size uniformity"]);
-            if(f["Overall Visual-Size uniformity_Comment"]) {
-                const matchedKo = Object.keys(DICTIONARY.sizeComment).find(k => DICTIONARY.sizeComment[k] === f["Overall Visual-Size uniformity_Comment"]);
-                if(matchedKo) setSingleValue('group_sizeUnifComm', matchedKo);
-            }
-            setSingleValue('group_colorUnif', f["Overall Visual-Colour uniformity"]);
-            setSingleValue('group_color', f["Overall Visual-Colour"]);
-            setSingleValue('group_fading', f["Overall Visual-Overall Fading"]);
-            
-            // 💡 신규 수용 사항: 임시저장 데이터 로드 시 신규 코멘트 복원 바인딩 연산
-            if(f["Overall Visual-Colour_Comment"]) {
-                const matchedColorKo = Object.keys(DICTIONARY.colorComment).find(k => DICTIONARY.colorComment[k] === f["Overall Visual-Colour_Comment"]);
-                if(matchedColorKo) setSingleValue('group_colorComm', matchedColorKo);
-            }
+function getMultiValues(groupId) {
+const actives = document.getElementById(groupId).querySelectorAll('.active-btn');
+return Array.from(actives).map(b => b.dataset.value);
+}
 
-            setSingleValue('group_defectEffect', f["Defect-effect to Quality (internal)"]);
-            setSingleValue('group_defectInGrade', f["Defect-in same grade"]);
-            
-            if(f["Major defect"]) setMultiValues('group_majorDefect', f["Major defect"].split(', '));
-            if(f["Defect_Comment"]) {
-                const rawEns2 = f["Defect_Comment"].split(', ');
-                setMultiValues('group_defectComm', Object.keys(DICTIONARY.defectComment).filter(k => rawEns2.includes(DICTIONARY.defectComment[k])));
-            }
+function setMultiValues(groupId, valuesArray) {
+const parent = document.getElementById(groupId);
+parent.querySelectorAll('.select-multi').forEach(b => b.classList.remove('active-btn'));
+if(!valuesArray || valuesArray.length === 0) return;
+valuesArray.forEach(val => {
+const target = parent.querySelector(`[data-value="${val}"]`);
+if(target) target.classList.add('active-btn');
+});
+}
 
-            document.getElementById('qtyAllInput').value = f["Qauntity-All"] !== undefined ? f["Qauntity-All"] : 500;
-            document.getElementById('qtyDefInput').value = f["Quantity-Defect(g)"] || "";
+// 💡 [구글 앱스크립트로부터 임시저장 목록 땡겨오기 - { drafts: [...] } 대응 픽스]
+function loadDraftList() {
+if (GOOGLE_WEB_APP_URL.includes("여기에_")) return;
+const select = document.getElementById('draftSelect');
+const defaultTxt = UI_LANG[currentLang].draftEmpty;
+select.innerHTML = `<option value="">⏳ Syncing...</option>`;
 
-            DEFECT_TYPES.forEach((name, index) => {
-                const targetInput = document.getElementById(`defect_${index}`);
-                if(targetInput) targetInput.value = f[name] || 0;
-            });
-            rebuildDynamicButtons();
-        }
+fetch(`${GOOGLE_WEB_APP_URL}?formType=qc`)
+.then(res => res.json())
+.then(data => {
+// 구글 스크립트가 { drafts: [...] } 로 반환하므로 분기 처리하여 TypeError 방지!
+activeDraftsList = data.drafts || data;
+select.innerHTML = `<option value="">${defaultTxt}</option>`;
+if(activeDraftsList.length === 0) return;
 
-        function submitData(statusMode) {
-            if (GOOGLE_WEB_APP_URL.includes("여기에_")) {
-                alert("🛑 구글 웹앱 URL이 설정되지 않아 저장이 불가능합니다.");
-                return;
-            }
-            
-            const coffeeName = document.getElementById('coffeeNameInput').value.trim();
-            if(!coffeeName) {
-                alert(currentLang === 'ko' ? "⚠ 커피 이름을 먼저 입력해 주세요." : "⚠ Please input the Coffee Name first.");
-                return;
-            }
+activeDraftsList.forEach(item => {
+const name = item.fields["Coffee"] || "Unknown Bean";
+const date = item.fields["Green Grading date"] || "No Date";
+select.innerHTML += `<option value="${item.rowId}">${name} (${date.substring(0,10)})</option>`;
+});
+})
+.catch(err => {
+alert("🛑 [Error] 임시저장 목록 갱신에 실패했습니다. 구글 계정 배포 권한이나 URL 주소를 다시 한 번 확인하세요.");
+console.error(err);
+select.innerHTML = `<option value="">Network Sync Error</option>`;
+});
+}
 
-            if(statusMode === 'Completed') {
-                const checkMsg = currentLang === 'ko' 
-                    ? `⚠️ [검사 완료 최종 처리]\n\n정말로 작성을 완료하시겠습니까?\n완료된 데이터는 앱에서 더 이상 편집할 수 없도록 격리됩니다.` 
-                    : `⚠️ [Complete Inspection]\n\nAre you sure you want to complete this inspection?\nCompleted data will be locked and isolated.`;
-                if(!confirm(checkMsg)) return;
-            }
+function loadSelectedDraft(rowId) {
+if(!rowId) {
+document.getElementById('qcForm').reset();
+document.getElementById('currentRowId').value = "";
+document.getElementById('qtyAllInput').value = "500";
+document.querySelectorAll('.active-btn').forEach(b => b.classList.remove('active-btn'));
+return;
+}
 
-            let rowId = document.getElementById('currentRowId').value;
-            if(!rowId) {
-                rowId = "ID_" + Date.now() + "_" + Math.floor(Math.random()*1000);
-            }
+const match = activeDraftsList.find(d => d.rowId == rowId);
+if(!match) return;
+var f = match.fields;
+document.getElementById('currentRowId').value = rowId;
+document.getElementById('coffeeNameInput').value = f["Coffee"] || "";
+setSingleValue('group_grade', f["Grade"]);
+document.getElementById('gradingDateInput').value = f["Green Grading date"] ? f["Green Grading date"].substring(0,10) : "";
+setSingleValue('group_qualityChange', f["Quality change from PSS"]);
+document.getElementById('enCommentInput').value = f["(EN)Overall Quality Comments"] || "";
+document.getElementById('koCommentInput').value = f["(KO)Overall Quality Comments"] || "";
 
-            const fields = {};
-            fields["Coffee"] = coffeeName;
-            fields["Grade"] = getSingleValue('group_grade');
-            fields["Green Grading date"] = document.getElementById('gradingDateInput').value;
-            fields["Picture"] = ""; fields["PSS Green Quality"] = ""; fields["PSS Measurement"] = ""; fields["Measurement (Internal)"] = ""; fields["Diff from PSS"] = "";
-            fields["Quality change from PSS"] = getSingleValue('group_qualityChange');
-            
-            const manualEn = document.getElementById('enCommentInput').value.trim();
-            fields["(EN)Overall Quality Comments"] = manualEn ? manualEn : `[Ref KO] ${document.getElementById('koCommentInput').value}`;
-            fields["(KO)Overall Quality Comments"] = document.getElementById('koCommentInput').value;
-            fields["Defect overall"] = "";
-            
-            const probKos = getMultiValues('group_probType');
-            fields["Type of problem"] = probKos.map(k => DICTIONARY.problem[k]).join(', ');
-            fields["Overall Visual-Size uniformity"] = getSingleValue('group_sizeUnif');
-            
-            const sizeKo = getSingleValue('group_sizeUnifComm');
-            fields["Overall Visual-Size uniformity_Comment"] = sizeKo ? DICTIONARY.sizeComment[sizeKo] : "";
-            
-            fields["Overall Visual-Colour uniformity"] = getSingleValue('group_colorUnif');
-            fields["Overall Visual-Colour"] = getSingleValue('group_color');
-            fields["Overall Visual-Overall Fading"] = getSingleValue('group_fading');
-            fields["Overall Visual-Colour_Comment"] = "";
-            
-            // 💡 신규 수용 사항: 동적 명칭 대조용 데이터 주입부 파싱 처리
-            const colorKo = getSingleValue('group_colorComm');
-            fields["Overall Visual-Colour_Comment"] = colorKo ? DICTIONARY.colorComment[colorKo] : "";
+if(f["Type of problem"]) {
+const rawEns = f["Type of problem"].split(', ');
+setMultiValues('group_probType', Object.keys(DICTIONARY.problem).filter(k => rawEns.includes(DICTIONARY.problem[k])));
+}
 
-            fields["Defect-effect to Quality (internal)"] = getSingleValue('group_defectEffect');
-            fields["Defect-in same grade"] = getSingleValue('group_defectInGrade');
-            fields["Major defect"] = getMultiValues('group_majorDefect').join(', ');
-            
-            const defComKos = getMultiValues('group_defectComm');
-            fields["Defect_Comment"] = defComKos.map(k => DICTIONARY.defectComment[k]).join(', ');
-            
-            fields["1st Group (score)"] = ""; fields["2nd Group (score)"] = ""; fields["Rate of defect-Ex (%)"] = ""; fields["Defect score"] = ""; fields["Green Quality Note"] = "";
-            fields["Qauntity-All"] = parseInt(document.getElementById('qtyAllInput').value) || 500;
-            fields["Quantity-Defect(g)"] = parseFloat(document.getElementById('qtyDefInput').value) || 0;
+setSingleValue('group_sizeUnif', f["Overall Visual-Size uniformity"]);
+if(f["Overall Visual-Size uniformity_Comment"]) {
+const matchedKo = Object.keys(DICTIONARY.sizeComment).find(k => DICTIONARY.sizeComment[k] === f["Overall Visual-Size uniformity_Comment"]);
+if(matchedKo) setSingleValue('group_sizeUnifComm', matchedKo);
+}
 
-            DEFECT_TYPES.forEach((name, index) => {
-                const targetInput = document.getElementById(`defect_${index}`);
-                fields[name] = targetInput ? (parseInt(targetInput.value) || 0) : 0;
-            });
+setSingleValue('group_colorUnif', f["Overall Visual-Colour uniformity"]);
+setSingleValue('group_color', f["Overall Visual-Colour"]);
+setSingleValue('group_fading', f["Overall Visual-Overall Fading"]);
 
-            const payload = { formType: "qc", rowId: rowId, status: statusMode, fields: fields };
+if(f["Overall Visual-Colour_Comment"]) {
+const matchedColorKo = Object.keys(DICTIONARY.colorComment).find(k => DICTIONARY.colorComment[k] === f["Overall Visual-Colour_Comment"]);
+if(matchedColorKo) setSingleValue('group_colorComm', matchedColorKo);
+}
 
-            const formInputs = document.getElementById('qcForm').querySelectorAll('button, input, textarea');
-            formInputs.forEach(i => i.disabled = true);
+setSingleValue('group_defectEffect', f["Defect-effect to Quality (internal)"]);
+setSingleValue('group_defectInGrade', f["Defect-in same grade"]);
+if(f["Major defect"]) setMultiValues('group_majorDefect', f["Major defect"].split(', '));
 
-            fetch(GOOGLE_WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(() => {
-                alert(currentLang === 'ko' ? "🎉 처리가 완료되었습니다!" : "🎉 Data submitted successfully!");
-                location.reload();
-            })
-            .catch(err => {
-                alert("❌ 통신 에러가 발생했습니다. 키보드의 F12를 눌러 [Console] 탭에 뜨는 빨간색 에러 메시지를 캡처해서 보여주세요!");
-                console.error(err);
-                formInputs.forEach(i => i.disabled = false);
-            });
-        }
-    </script>
+if(f["Defect_Comment"]) {
+const rawEns2 = f["Defect_Comment"].split(', ');
+setMultiValues('group_defectComm', Object.keys(DICTIONARY.defectComment).filter(k => rawEns2.includes(DICTIONARY.defectComment[k])));
+}
+
+document.getElementById('qtyAllInput').value = f["Qauntity-All"] !== undefined ? f["Qauntity-All"] : 500;
+document.getElementById('qtyDefInput').value = f["Quantity-Defect(g)"] || "";
+
+DEFECT_TYPES.forEach((name, index) => {
+const targetInput = document.getElementById(`defect_${index}`);
+if(targetInput) targetInput.value = f[name] || 0;
+});
+
+rebuildDynamicButtons();
+}
+
+function submitData(statusMode) {
+if (GOOGLE_WEB_APP_URL.includes("여기에_")) {
+alert("🛑 구글 웹앱 URL이 설정되지 않아 저장이 불가능합니다.");
+return;
+}
+
+const coffeeName = document.getElementById('coffeeNameInput').value.trim();
+if(!coffeeName) {
+alert(currentLang === 'ko' ? "⚠ 커피 이름을 먼저 입력해 주세요." : "⚠ Please input the Coffee Name first.");
+return;
+}
+
+if(statusMode === 'Completed') {
+const checkMsg = currentLang === 'ko'
+? `⚠️ [검사 완료 최종 처리]\n\n정말로 작성을 완료하시겠습니까?\n완료된 데이터는 앱에서 더 이상 편집할 수 없도록 격리됩니다.`
+: `⚠️ [Complete Inspection]\n\nAre you sure you want to complete this inspection?\nCompleted data will be locked and isolated.`;
+if(!confirm(checkMsg)) return;
+}
+
+let rowId = document.getElementById('currentRowId').value;
+if(!rowId) {
+rowId = "ID_" + Date.now() + "_" + Math.floor(Math.random()*1000);
+}
+
+const fields = {};
+fields["Coffee"] = coffeeName;
+fields["Grade"] = getSingleValue('group_grade');
+fields["Green Grading date"] = document.getElementById('gradingDateInput').value;
+fields["Picture"] = ""; fields["PSS Green Quality"] = ""; fields["PSS Measurement"] = ""; fields["Measurement (Internal)"] = ""; fields["Diff from PSS"] = "";
+fields["Quality change from PSS"] = getSingleValue('group_qualityChange');
+
+const manualEn = document.getElementById('enCommentInput').value.trim();
+fields["(EN)Overall Quality Comments"] = manualEn ? manualEn : `[Ref KO] ${document.getElementById('koCommentInput').value}`;
+fields["(KO)Overall Quality Comments"] = document.getElementById('koCommentInput').value;
+fields["Defect overall"] = "";
+
+const probKos = getMultiValues('group_probType');
+fields["Type of problem"] = probKos.map(k => DICTIONARY.problem[k]).join(', ');
+
+fields["Overall Visual-Size uniformity"] = getSingleValue('group_sizeUnif');
+const sizeKo = getSingleValue('group_sizeUnifComm');
+fields["Overall Visual-Size uniformity_Comment"] = sizeKo ? DICTIONARY.sizeComment[sizeKo] : "";
+
+fields["Overall Visual-Colour uniformity"] = getSingleValue('group_colorUnif');
+fields["Overall Visual-Colour"] = getSingleValue('group_color');
+fields["Overall Visual-Overall Fading"] = getSingleValue('group_fading');
+fields["Overall Visual-Colour_Comment"] = "";
+
+const colorKo = getSingleValue('group_colorComm');
+fields["Overall Visual-Colour_Comment"] = colorKo ? DICTIONARY.colorComment[colorKo] : "";
+fields["Defect-effect to Quality (internal)"] = getSingleValue('group_defectEffect');
+fields["Defect-in same grade"] = getSingleValue('group_defectInGrade');
+fields["Major defect"] = getMultiValues('group_majorDefect').join(', ');
+
+const defComKos = getMultiValues('group_defectComm');
+fields["Defect_Comment"] = defComKos.map(k => DICTIONARY.defectComment[k]).join(', ');
+fields["1st Group (score)"] = ""; fields["2nd Group (score)"] = ""; fields["Rate of defect-Ex (%)"] = ""; fields["Defect score"] = ""; fields["Green Quality Note"] = "";
+fields["Qauntity-All"] = parseInt(document.getElementById('qtyAllInput').value) || 500;
+fields["Quantity-Defect(g)"] = parseFloat(document.getElementById('qtyDefInput').value) || 0;
+
+DEFECT_TYPES.forEach((name, index) => {
+const targetInput = document.getElementById(`defect_${index}`);
+fields[name] = targetInput ? (parseInt(targetInput.value) || 0) : 0;
+});
+
+// 💡 [그린그레이딩 전용 formType: "qc" 전송 보장]
+const payload = { formType: "qc", rowId: rowId, status: statusMode, fields: fields };
+
+const formInputs = document.getElementById('qcForm').querySelectorAll('button, input, textarea');
+formInputs.forEach(i => i.disabled = true);
+
+fetch(GOOGLE_WEB_APP_URL, {
+method: 'POST',
+mode: 'no-cors',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(payload)
+})
+.then(() => {
+alert(currentLang === 'ko' ? "🎉 처리가 완료되었습니다!" : "🎉 Data submitted successfully!");
+location.reload();
+})
+.catch(err => {
+alert("❌ 통신 에러가 발생했습니다. 키보드의 F12를 눌러 [Console] 탭에 뜨는 빨간색 에러 메시지를 캡처해서 보여주세요!");
+console.error(err);
+formInputs.forEach(i => i.disabled = false);
+});
+}
+</script>
 </body>
 </html>
