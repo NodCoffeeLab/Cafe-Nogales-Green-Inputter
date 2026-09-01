@@ -604,7 +604,7 @@
             const defaultTxt = UI_LANG[currentLang].draftEmpty;
             select.innerHTML = `<option value="">⏳ Syncing...</option>`;
             
-            fetch(GOOGLE_WEB_APP_URL)
+            fetch(`${GOOGLE_WEB_APP_URL}?formType=qc`)
             .then(res => res.json())
             .then(data => {
                 activeDraftsList = data;
@@ -751,7 +751,7 @@
                 fields[name] = targetInput ? (parseInt(targetInput.value) || 0) : 0;
             });
 
-            const payload = { rowId: rowId, status: statusMode, fields: fields };
+            const payload = { formType: "qc", rowId: rowId, status: statusMode, fields: fields };
 
             const formInputs = document.getElementById('qcForm').querySelectorAll('button, input, textarea');
             formInputs.forEach(i => i.disabled = true);
