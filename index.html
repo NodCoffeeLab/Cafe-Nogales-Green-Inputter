@@ -11,9 +11,19 @@
 <link class="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5016/5016839.png">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-.active-btn { background-color: #2563eb !important; color: white !important; border-color: #2563eb !important; }
-.accordion-content { transition: max-height 0.3s ease-out; overflow: hidden; }
-.accordion-content.closed { max-height: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+  .active-btn { background-color: #2563eb !important; color: white !important; border-color: #2563eb !important; }
+  .accordion-content { transition: max-height 0.3s ease-out; overflow: hidden; }
+  .accordion-content.closed { max-height: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+  
+  /* 🟢 추가된 영역: 모든 브라우저에서 숫자 입력 칸 우측의 화살표(스피너)를 완전 제거 */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
 </style>
 </head>
 <body class="bg-gray-50 min-h-screen pb-16 font-sans text-gray-800">
@@ -515,20 +525,27 @@ if(target) target.classList.add('active-btn');
 }
 
 function buildDefectCounters() {
-const container = document.getElementById('defectCounters');
-container.innerHTML = '';
-DEFECT_TYPES.forEach((name, index) => {
-container.innerHTML += `
-<div class="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between shadow-sm">
-<span class="text-xs font-bold text-gray-700 break-words pr-2 flex-1">${name}</span>
-<div class="flex items-center space-x-1 shrink-0 w-28 justify-end">
-<button type="button" onclick="stepCount(${index}, -1)" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg font-bold text-sm select-none flex items-center justify-center text-gray-600">-</button>
-<input type="number" id="defect_${index}" value="0" min="0" class="w-10 h-8 text-center bg-white border border-gray-300 rounded-lg text-xs font-bold font-mono outline-none shadow-inner">
-<button type="button" onclick="stepCount(${index}, 1)" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg font-bold text-sm select-none flex items-center justify-center text-gray-600">+</button>
-</div>
-</div>
-`;
-});
+  const container = document.getElementById('defectCounters');
+  container.innerHTML = '';
+  DEFECT_TYPES.forEach((name, index) => {
+    container.innerHTML += `
+      <div class="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between shadow-sm">
+        <span class="text-xs font-bold text-gray-700 break-words pr-2 flex-1">${name}</span>
+        
+        <!-- 🟢 수정된 영역: w-28을 w-32로 넓히고 완벽한 가운데 수직 정렬 부여 -->
+        <div class="flex items-center justify-end shrink-0 w-32 space-x-1">
+          <!-- 마이너스 버튼 (터치 영역 개선) -->
+          <button type="button" onclick="stepCount(${index}, -1)" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg font-bold text-base select-none flex items-center justify-center text-gray-600 active:bg-gray-300">-</button>
+          
+          <!-- 결점두 숫자칸 (w-10을 w-12로 키워 세 자릿수까지 잘림 없이 표기) -->
+          <input type="number" id="defect_${index}" value="0" min="0" class="w-12 h-8 text-center bg-white border border-gray-300 rounded-lg text-xs font-bold font-mono outline-none shadow-inner">
+          
+          <!-- 플러스 버튼 -->
+          <button type="button" onclick="stepCount(${index}, 1)" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg font-bold text-base select-none flex items-center justify-center text-gray-600 active:bg-gray-300">+</button>
+        </div>
+      </div>
+    `;
+  });
 }
 
 function stepCount(index, amount) {
