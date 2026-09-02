@@ -147,7 +147,7 @@
 <span class="arrow text-xs text-gray-400">▼</span>
 </button>
 <div class="accordion-content closed p-4">
-<div id="defectCounters" class="grid grid-cols-1 gap-3 sm:grid-cols-2"></div>
+<div id="defectCounters" class="grid grid-cols-1 gap-2.5"></div>
 </div>
 </div>
 
@@ -531,22 +531,16 @@ function buildDefectCounters() {
     container.innerHTML += `
       <div class="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between shadow-sm">
         <span class="text-xs font-bold text-gray-700 break-words pr-2 flex-1">${name}</span>
-        
-        <!-- 🟢 수정된 영역: w-28을 w-32로 넓히고 완벽한 가운데 수직 정렬 부여 -->
-        <div class="flex items-center justify-end shrink-0 w-32 space-x-1">
-          <!-- 마이너스 버튼 (터치 영역 개선) -->
+        <div class="flex items-center justify-end shrink-0 w-32 space-x-1.5">
           <button type="button" onclick="stepCount(${index}, -1)" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg font-bold text-base select-none flex items-center justify-center text-gray-600 active:bg-gray-300">-</button>
-          
-          <!-- 결점두 숫자칸 (w-10을 w-12로 키워 세 자릿수까지 잘림 없이 표기) -->
           <input type="number" id="defect_${index}" value="0" min="0" class="w-12 h-8 text-center bg-white border border-gray-300 rounded-lg text-xs font-bold font-mono outline-none shadow-inner">
-          
-          <!-- 플러스 버튼 -->
           <button type="button" onclick="stepCount(${index}, 1)" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg font-bold text-base select-none flex items-center justify-center text-gray-600 active:bg-gray-300">+</button>
         </div>
       </div>
     `;
   });
 }
+
 
 function stepCount(index, amount) {
 const input = document.getElementById(`defect_${index}`);
